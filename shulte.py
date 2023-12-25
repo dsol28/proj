@@ -1,5 +1,5 @@
 import pygame
-import copy
+import sys
 import random
 pygame.init()
 
@@ -91,7 +91,8 @@ class Shulte(Board):
 
 
 if __name__ == '__main__':
-    board = Shulte(5, 5)
+    
+    board = Shulte(2, 2)
     board.set_view(100, 100, 50)
     width = board.left * 2 + board.width * board.cell_size
     height = board.top * 2 + board.height * board.cell_size
