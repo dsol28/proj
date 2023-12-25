@@ -9,7 +9,6 @@ class Board:
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
-        # значения по умолчанию
         self.left = 10
         self.top = 10
         self.cell_size = 5
@@ -24,9 +23,8 @@ class Board:
     def render(self, surface):
         for x in range(self.width):
             for y in range(self.height):
-
-                pygame.draw.rect(surface, pygame.Color('black'),
-                            (self.left + self.cell_size * x,
+                pygame.draw.rect(surface, pygame.Color('black'), 
+                                 (self.left + self.cell_size * x,
                                   self.top + self.cell_size * y,
                                   self.cell_size, self.cell_size), 1)
 
@@ -44,7 +42,7 @@ class Board:
     def get_click(self, mouse_pos, surface):
         cell = self.get_cell(mouse_pos)
         self.check(cell, surface)
-        print(cell)
+        print(cell) ###
 
 
 class Shulte(Board):
@@ -52,13 +50,13 @@ class Shulte(Board):
         super().__init__(width, height)
     
     def spawn(self, surface):
-        zxc = random.sample(range(1, 26), 25)
+        sample_of_number = random.sample(range(1, self.width * self.height + 1), self.width * self.height)
         number = 0
         for y in range(self.height):
             for x in range(self.width):
-                self.board[y][x] = zxc[number]
+                self.board[y][x] = sample_of_number[number]
                 font = pygame.font.Font(None, self.cell_size)
-                text = font.render(str(zxc[number]), False, (255, 0, 0))
+                text = font.render(str(sample_of_number[number]), False, (255, 0, 0))
                 screen.blit(text, (x * self.cell_size, y * self.cell_size))
                 number += 1
         super().render(surface)
@@ -72,8 +70,8 @@ class Shulte(Board):
         font = pygame.font.Font(None, self.cell_size * 2)
         text = font.render(str(self.finding_num), False, (pygame.color.Color('black')))
         screen.blit(text, (30, 30))
-        super().render(surface)
         self.time(ticks)
+        super().render(surface)
 
     def check(self, cell, surface):
         global ticks
@@ -81,7 +79,7 @@ class Shulte(Board):
             y, x = cell
             if self.board[y][x] == self.finding_num:
                 self.finding_num += 1
-        if self.finding_num == 26:
+        if self.finding_num == self.width * self.height + 1:
             self.finding_num = 1
             self.spawn(surface)
             ticks = 0
@@ -90,7 +88,6 @@ class Shulte(Board):
         font = pygame.font.Font(None, self.cell_size * 2)
         text = font.render(str(time // 100), False, (pygame.color.Color('black')))
         screen.blit(text, (300, 30))
-
 
 
 if __name__ == '__main__':
@@ -102,12 +99,10 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     board.spawn(screen)
 
-    running = True
-
-    game_on = False
     clock = pygame.time.Clock()
-    speed = 10
     ticks = 0
+    
+    running = True
 
     while running:
         for event in pygame.event.get():
@@ -116,10 +111,6 @@ if __name__ == '__main__':
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     board.get_click(event.pos, screen)
-
-            #if event.type == pygame.KEYDOWN:
-            #    if event.key == pygame.K_SPACE:
-            #        game_on = not game_on
         screen.fill(pygame.color.Color('white'))
         board.render(screen)
         clock.tick(100)
